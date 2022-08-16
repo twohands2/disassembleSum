@@ -21,13 +21,18 @@
             // N이 한자리 수일때
             if( 1 === nLength ) {
                 // 한자리 수가 홀수일때 생성자가 없다. -> 생성자 0
-                const n2 = nVal % 2;
-                if( 0 !== n2 ) {
+                if( 0 !== ( nVal % 2 ) ) {
                     creator.value = 0;
+                } else {
+                    creator.value = ( nVal / 2 );
                 }
             } else {
                 // 생성자 구하는 경우의 수에서 분해합 최소값
-                const min = nVal - ( 9 * nLength );
+
+                let min = nVal - ( 9 * nLength );
+                if( nVal <= ( 9 * nLength ) ) {
+                    min = nVal - ( 9 * ( nLength - 1 ) );
+                }
 
                 // 경우의 수 마다 분해합을 구해서 nVal과 같은 값을 가지는 경우 찾기
                 for( let i = min; i < nVal; i++ ) {
@@ -38,8 +43,16 @@
                         accum += parseInt( iString[ j ] );
                     }
 
+                    // 경우의 수의 생성자에서 구한 분해합과 nVal이 같은 경우
                     if( nVal === ( i + accum ) ) {
-                        creator.value = min;
+                        creator.value = i;
+                        return;
+                    }
+
+                    // 마지막 경우의 수까지 생성자를 찾기 못한 경우 -> 생성자 0
+                    if( i === ( nVal - 1 ) ) {
+                        creator.value = 0;
+                        return;
                     }
                 }
             }
