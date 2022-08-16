@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script>
+        console.log( '문제 링크 : https://www.acmicpc.net/problem/2231' );
+
+        function calculate() {
+            const creator = document.getElementById( 'creator' );
+            const n = document.getElementById( 'N' );
+            const nVal = parseInt( n.value );
+
+            if( !( 1 <= nVal && 1000000 >= nVal ) ) {
+                alert( 'N은 1보다 크거나 같고 1,000,000보다 작거나 같습니다.' );
+                return;
+            }
+
+            // N의 자리수
+            const nLength = ( nVal + '' ).length;
+
+            // N이 한자리 수일때
+            if( 1 === nLength ) {
+                // 한자리 수가 홀수일때 생성자가 없다. -> 생성자 0
+                const n2 = nVal % 2;
+                if( 0 !== n2 ) {
+                    creator.value = 0;
+                }
+            } else {
+                // 생성자 구하는 경우의 수에서 분해합 최소값
+                const min = nVal - ( 9 * nLength );
+
+                // 경우의 수 마다 분해합을 구해서 nVal과 같은 값을 가지는 경우 찾기
+                for( let i = min; i < nVal; i++ ) {
+                    // 분해합 구하기
+                    const iString = i + ''; // iString = min
+                    let accum = 0; // 각 자리수의 합
+                    for( let j = 0; j < iString.length; j++ ) {
+                        accum += parseInt( iString[ j ] );
+                    }
+
+                    if( nVal === ( i + accum ) ) {
+                        creator.value = min;
+                    }
+                }
+            }
+        }
+
+    </script>
+    <title>분해합</title>
+</head>
+<body>
+    <label>
+        N
+        <input type="number" id="N">
+    </label>
+    <p></p>
+    <button type="button" onclick="calculate();" style="width: 70px">계산</button>
+
+    <p>================================================================================</p>
+
+    <label>
+        생성자
+        <input type="number" id="creator" style="width: 70px" disabled>
+    </label>
+</body>
+</html>
